@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theme tokens. Every surface color is a CSS variable so light/dark switch in
+ * one place - restyle the page by editing these values, nothing else.
+ * Values are space-separated RGB triplets so Tailwind's `<alpha-value>` works
+ * (e.g. bg-card/90). Do not hardcode gray-50 / gray-900 on surfaces; use the
+ * semantic tokens (bg-background, text-foreground, bg-card, border-border...).
+ */
+@layer base {
+  :root {
+    --background: 249 250 251; /* gray-50 */
+    --foreground: 17 24 39; /* gray-900 */
+    --card: 255 255 255;
+    --card-foreground: 17 24 39;
+    --border: 229 231 235; /* gray-200 */
+    --input: 255 255 255;
+    --muted: 243 244 246; /* gray-100 */
+    --muted-foreground: 107 114 128; /* gray-500 */
+    --ring: 59 130 246; /* blue-500 */
+
+    /* Uptime status scale. One bar colour per health band, plus a -strong
+     * variant for text on the tinted banner, which needs contrast the bar
+     * colour does not carry at small sizes. */
+    --ok: 34 197 94; /* green-500 */
+    --ok-strong: 21 128 61; /* green-700 */
+    --warn: 245 158 11; /* amber-500 */
+    --warn-strong: 180 83 9; /* amber-700 */
+    --down: 239 68 68; /* red-500 */
+    --down-strong: 185 28 28; /* red-700 */
+    --nodata: 209 213 219; /* gray-300 - a day with no checks, never an outage */
+  }
+
+  .dark {
+    --background: 3 7 18; /* gray-950 */
+    --foreground: 243 244 246; /* gray-100 */
+    --card: 17 24 39; /* gray-900 */
+    --card-foreground: 243 244 246;
+    --border: 31 41 55; /* gray-800 */
+    --input: 31 41 55;
+    --muted: 31 41 55;
+    --muted-foreground: 156 163 175; /* gray-400 */
+    --ring: 96 165 250; /* blue-400 */
+
+    --ok: 34 197 94; /* green-500 */
+    --ok-strong: 134 239 172; /* green-300 */
+    --warn: 245 158 11; /* amber-500 */
+    --warn-strong: 252 211 77; /* amber-300 */
+    --down: 248 113 113; /* red-400 */
+    --down-strong: 252 165 165; /* red-300 */
+    --nodata: 55 65 81; /* gray-700 */
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

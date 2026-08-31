@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "status-page-probe",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "observability": {
+    "enabled": true
+  },
+  "triggers": {
+    // One probe pass every 20 minutes. Each pass checks up to 40 services
+    // (free-plan subrequest cap); larger rosters rotate across ticks.
+    "crons": ["*/20 * * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "status-page-db",
+      // Paste the id printed by `npx wrangler d1 create status-page-db`.
+      "database_id": "REPLACE_ME_AFTER_D1_CREATE"
+    }
+  ]
+}
