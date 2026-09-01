@@ -92,6 +92,7 @@ NEXT_PUBLIC_UPTIME_API=http://localhost:8787/api/v1 npm run dev
 ## Limits and probe semantics
 
 - Each probe is a `GET` with an 8s timeout that does not follow redirects; HTTP 200-399 counts as up, anything else (or a network error) as down.
+- While a service is down, the feed carries a terse automatic reason (`HTTP 503`, `Timed out`, `Unreachable`) and the page shows it next to the service name.
 - Rollups are per UTC day; a day with zero checks renders grey ("no data"), never as 0%.
 - The free Workers plan caps subrequests at 50 per invocation, so each cron tick probes at most 40 services, stalest first; larger rosters rotate across ticks.
 - The probe sends `User-Agent: status-page-probe/1.0 (+https://github.com/LatentFreedom/status-page)`.

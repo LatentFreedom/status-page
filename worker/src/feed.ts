@@ -18,6 +18,7 @@ interface StatusRow {
   service_id: string;
   is_online: number | null;
   last_check: number | null;
+  reason: string | null;
 }
 
 interface DailyRow {
@@ -66,7 +67,7 @@ export async function handleFeed(
 
   const [status, daily] = await Promise.all([
     env.DB.prepare(
-      "SELECT service_id, is_online, last_check FROM service_status",
+      "SELECT service_id, is_online, last_check, reason FROM service_status",
     ).all<StatusRow>(),
     env.DB.prepare(
       `SELECT service_id, day, checks, up_checks FROM reachability_daily
@@ -118,6 +119,8 @@ export async function handleFeed(
       current,
       // Epoch seconds, exactly as service_status stores it.
       last_check: row?.last_check ?? null,
+      // Terse cause while down; the probe writes NULL on every up check.
+      reason: row?.reason ?? null,
       uptime_pct: pctOf(windowUpChecks, windowChecks),
       days,
     };

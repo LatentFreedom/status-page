@@ -31,6 +31,11 @@ export default function ServiceRow({ service }: { service: Service }) {
           >
             {service.name}
           </a>
+          {service.current === "down" && service.reason && (
+            <span className="shrink-0 text-xs font-medium text-down-strong">
+              {service.reason}
+            </span>
+          )}
           <span className="sr-only">{STATE_LABEL[service.current]}</span>
         </div>
         <span className="shrink-0 text-sm tabular-nums text-muted-foreground">

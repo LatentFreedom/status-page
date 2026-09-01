@@ -26,6 +26,8 @@ export type Service = {
   url: string;
   current: ServiceState;
   last_check: number | null; // unix seconds
+  /** Terse cause while down ("HTTP 503", "Timed out"). Optional: older feeds omit it. */
+  reason?: string | null;
   uptime_pct: number | null;
   days: DayBucket[];
 };

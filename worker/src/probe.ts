@@ -37,6 +37,9 @@ interface ProbeResult {
   url: string;
   isOnline: boolean;
   responseTimeMs: number | null;
+  /** Terse public cause while down ("HTTP 503", "Timed out", "Unreachable"); null when up. */
+  reason: string | null;
+  /** Raw detail for the reachability_checks log; never published. */
   error?: string;
 }
 
@@ -78,14 +81,24 @@ async function probe(target: ProbeTarget): Promise<ProbeResult> {
     // status page. With manual redirect, Workers returns the real 3xx status
     // here, so this branch covers redirects without following them.
     const isOnline = response.status >= 200 && response.status < 400;
-    return { id: target.id, url: target.url, isOnline, responseTimeMs };
+    if (isOnline) {
+      return { id: target.id, url: target.url, isOnline, responseTimeMs, reason: null };
+    }
+    // The status IS the public reason, and it goes to the raw log too so
+    // status-based downs are as inspectable as network failures.
+    const reason = `HTTP ${response.status}`;
+    return { id: target.id, url: target.url, isOnline, responseTimeMs, reason, error: reason };
   } catch (err) {
     // Timeout, DNS failure, refused connection, TLS error: unreachable.
+    // Workers fetch errors are too generic to distinguish those publicly,
+    // so the reason stays at two buckets; the raw detail goes to the log.
+    const timedOut = err instanceof Error && err.name === "AbortError";
     return {
       id: target.id,
       url: target.url,
       isOnline: false,
       responseTimeMs: null,
+      reason: timedOut ? "Timed out" : "Unreachable",
       error: err instanceof Error ? `${err.name}: ${err.message}` : String(err),
     };
   } finally {
@@ -152,12 +165,13 @@ export async function runProbe(env: Env): Promise<ProbeSummary> {
   // fetches already spend most of the subrequest budget, so separate env.DB
   // calls per service would blow the ceiling.
   const upsertStatus = env.DB.prepare(
-    `INSERT INTO service_status (service_id, is_online, last_check, response_time)
-     VALUES (?, ?, ?, ?)
+    `INSERT INTO service_status (service_id, is_online, last_check, response_time, reason)
+     VALUES (?, ?, ?, ?, ?)
      ON CONFLICT(service_id) DO UPDATE SET
        is_online = excluded.is_online,
        last_check = excluded.last_check,
-       response_time = excluded.response_time`,
+       response_time = excluded.response_time,
+       reason = excluded.reason`,
   );
   const insertCheck = env.DB.prepare(
     "INSERT INTO reachability_checks (service_id, checked_at, is_online, response_time, error) VALUES (?, ?, ?, ?, ?)",
@@ -181,7 +195,7 @@ export async function runProbe(env: Env): Promise<ProbeSummary> {
   const batch: D1PreparedStatement[] = [];
   for (const p of probes) {
     batch.push(
-      upsertStatus.bind(p.id, p.isOnline ? 1 : 0, nowEpochSeconds, p.responseTimeMs),
+      upsertStatus.bind(p.id, p.isOnline ? 1 : 0, nowEpochSeconds, p.responseTimeMs, p.reason),
     );
     batch.push(
       insertCheck.bind(p.id, nowEpochSeconds, p.isOnline ? 1 : 0, p.responseTimeMs, p.error ?? null),
