@@ -3,12 +3,10 @@ import { Suspense } from "react";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ThemeToggle from "@/components/ThemeToggle";
+import { buildMetadata } from "@/lib/seo";
 import config from "../../status.config";
 
-export const metadata: Metadata = {
-  title: config.title,
-  description: config.description,
-};
+export const metadata: Metadata = buildMetadata(config);
 
 // Runs before paint to set the theme class, preventing a light/dark flash.
 const NO_FLASH_THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.classList.toggle('dark',t==='dark');}catch(e){}})();`;

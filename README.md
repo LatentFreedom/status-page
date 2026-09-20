@@ -64,6 +64,8 @@ Removing a service just stops probing it; its old rows are ignored and the raw l
 ## Branding
 
 - Title, description, and logo: `status.config.ts` (logo files go in `frontend/public/`; set `logo: null` to hide it).
+- Search and share previews: `siteUrl`, `ogImage` (1200x630), and `icons` feed the canonical URL, Open Graph and Twitter tags, and `sitemap.xml`.
+- Search engines: `indexable` is the one switch. `false` emits a `noindex` meta tag and a disallow-all `robots.txt` together, so a pre-launch site cannot be half open.
 - Colors: CSS variables in `frontend/app/globals.css` - every surface and status color is a token with a light and a dark value.
 
 ## Remote-feed mode
@@ -71,6 +73,7 @@ Removing a service just stops probing it; its old rows are ignored and the raw l
 The frontend and worker are decoupled by the feed contract ([CONTRACT.md](CONTRACT.md)).
 If you already have an endpoint that serves that JSON shape, point the frontend at it and skip the worker + D1 entirely:
 set `apiBase` in the config, or override per build with `NEXT_PUBLIC_UPTIME_API`.
+In that mode leave `services` out of the config: the page takes its service list from the feed, and only the worker reads `services`.
 
 ## Local development
 
