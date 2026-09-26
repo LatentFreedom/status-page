@@ -5,6 +5,18 @@ import type { Env } from "./env.js";
 
 export type { Env } from "./env.js";
 export type { ProbeSummary } from "./probe.js";
+export {
+  buildFeed,
+  FEED_CACHE_CONTROL,
+  feedWindow,
+  overallOf,
+  pctOf,
+  reasonFromError,
+  utcDay,
+  WINDOW_DAYS,
+  type FeedDailyInput,
+  type FeedServiceInput,
+} from "./build-feed.js";
 
 // The status page is usually served from a different origin than this worker
 // (Pages domain vs workers.dev), and the feed is public read-only data, so a

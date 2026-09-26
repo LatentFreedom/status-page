@@ -5,5 +5,5 @@
     "lib": ["es2022"],
     "types": ["@cloudflare/workers-types"]
   },
-  "include": ["src/worker", "src/config.ts"]
+  "include": ["src/worker", "src/config.ts", "src/contract.ts"]
 }
