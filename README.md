@@ -5,6 +5,12 @@ A self-hosted status page on Cloudflare: Next.js static frontend, a probe Worker
 - One overall banner, one row per service, 90 days of uptime bars, auto-refresh every minute.
 - Light and dark themes, mobile-friendly (tap or scrub the bars for a day detail card).
 - No accounts, no framework lock-in, no runtime dependencies in the worker.
+- All code ships in one npm package, [`@latentfreedom/status-page`](packages/status-page). Your repo holds only config, assets, and deploy wiring, so an upgrade is a version bump.
+
+## Repo layout
+
+- `packages/status-page/` - the published package: React page, Next.js metadata helpers, the probe worker, and the D1 migrations.
+- `template/` - the thin instance you copy: `status.config.ts`, a `frontend/` shell, and a `worker/` shell.
 
 ## How it works
 
@@ -20,7 +26,7 @@ status.config.ts ──▶ worker (cron probe) ──▶ D1 ──▶ /api/v1/up
 
 Prerequisites: a Cloudflare account (free plan works) and Node 20+.
 
-1. Click **Use this template** on GitHub, clone your copy.
+1. Copy the instance shell: `npx degit LatentFreedom/status-page/template my-status && cd my-status`.
 2. Edit `status.config.ts`: your services, title, description, logo.
 3. Create the database and deploy the worker:
 
@@ -66,14 +72,23 @@ Removing a service just stops probing it; its old rows are ignored and the raw l
 - Title, description, and logo: `status.config.ts` (logo files go in `frontend/public/`; set `logo: null` to hide it).
 - Search and share previews: `siteUrl`, `ogImage` (1200x630), and `icons` feed the canonical URL, Open Graph and Twitter tags, and `sitemap.xml`.
 - Search engines: `indexable` is the one switch. `false` emits a `noindex` meta tag and a disallow-all `robots.txt` together, so a pre-launch site cannot be half open.
-- Colors: CSS variables in `frontend/app/globals.css` - every surface and status color is a token with a light and a dark value.
+- Colors: every surface and status color is a CSS variable with a light and a dark value. Override them in your own stylesheet, imported after `@latentfreedom/status-page/styles.css` in `frontend/app/layout.tsx`. The token names are in [`input.css`](packages/status-page/src/styles/input.css).
 
 ## Remote-feed mode
 
-The frontend and worker are decoupled by the feed contract ([CONTRACT.md](CONTRACT.md)).
+The frontend and worker are decoupled by the feed contract ([CONTRACT.md](packages/status-page/CONTRACT.md)).
 If you already have an endpoint that serves that JSON shape, point the frontend at it and skip the worker + D1 entirely:
 set `apiBase` in the config, or override per build with `NEXT_PUBLIC_UPTIME_API`.
-In that mode leave `services` out of the config: the page takes its service list from the feed, and only the worker reads `services`.
+In that mode delete `worker/` and leave `services` out of the config: the page takes its service list from the feed, and only the worker reads `services`.
+
+## Upgrading
+
+```bash
+cd frontend && npm install @latentfreedom/status-page@latest
+cd ../worker && npm install @latentfreedom/status-page@latest && npm run migrate
+```
+
+The D1 migrations ship inside the package (`worker/wrangler.jsonc` points `migrations_dir` at it), so always run `npm run migrate` before you deploy an upgraded worker.
 
 ## Local development
 
@@ -99,6 +114,17 @@ NEXT_PUBLIC_UPTIME_API=http://localhost:8787/api/v1 npm run dev
 - Rollups are per UTC day; a day with zero checks renders grey ("no data"), never as 0%.
 - The free Workers plan caps subrequests at 50 per invocation, so each cron tick probes at most 40 services, stalest first; larger rosters rotate across ticks.
 - The probe sends `User-Agent: status-page-probe/1.0 (+https://github.com/LatentFreedom/status-page)`.
+
+## Working on the package
+
+```bash
+cd packages/status-page
+npm ci
+npm run typecheck && npm test && npm run build
+npm pack   # then `npm install --no-save <tarball>` inside template/frontend or template/worker
+```
+
+A `v*` tag publishes to npm through `.github/workflows/release.yml`.
 
 ## License
 

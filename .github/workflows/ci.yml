@@ -6,40 +6,75 @@ on:
   pull_request:
 
 jobs:
-  frontend:
+  package:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
+        working-directory: packages/status-page
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: packages/status-page/package-lock.json
       - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm pack
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tarball
+          path: packages/status-page/*.tgz
+
+  # The template installs the tarball built above instead of the registry
+  # version, so an unreleased package change is proven against a real shell.
+  template-frontend:
+    needs: package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: template/frontend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: tarball
+          path: tarball
+      # The template ships no lockfile (a copy generates its own), so point the
+      # dependency at the tarball and resolve the rest fresh.
+      - run: npm pkg set "dependencies.@latentfreedom/status-page=file:$(ls ../../tarball/*.tgz)"
+      - run: npm install --no-package-lock
       - run: npm run lint
       - run: npm run typecheck
-      # The build also proves the repo-root status.config.ts import resolves.
       - run: npm run build
       # Advisory only: a new upstream CVE must not block an unrelated change.
       - run: npm run audit
         continue-on-error: true
 
-  worker:
+  template-worker:
+    needs: package
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: worker
+        working-directory: template/worker
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: worker/package-lock.json
-      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: tarball
+          path: tarball
+      # The template ships no lockfile (a copy generates its own), so point the
+      # dependency at the tarball and resolve the rest fresh.
+      - run: npm pkg set "dependencies.@latentfreedom/status-page=file:$(ls ../../tarball/*.tgz)"
+      - run: npm install --no-package-lock
       - run: npm run typecheck
       # Bundles the worker without touching any Cloudflare account.
       - run: npx wrangler deploy --dry-run --outdir=dist
