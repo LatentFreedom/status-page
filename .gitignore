@@ -17,3 +17,6 @@ template/worker/dist/
 # misc
 .DS_Store
 npm-debug.log*
+
+# instances generate their own lockfiles
+template/**/package-lock.json
