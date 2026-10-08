@@ -2,11 +2,12 @@
   "name": "@latentfreedom/status-page",
   "version": "0.2.0",
   "description": "Self-hosted status page on Cloudflare: React page, Next.js metadata helpers, and a probe Worker with D1 - driven by one config file.",
+  "author": "LatentFreedom",
   "license": "MIT",
-  "type": "module",
-  "sideEffects": [
-    "*.css"
-  ],
+  "homepage": "https://github.com/LatentFreedom/status-page#readme",
+  "bugs": {
+    "url": "https://github.com/LatentFreedom/status-page/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LatentFreedom/status-page.git",
@@ -19,6 +20,10 @@
     "workers",
     "d1",
     "nextjs"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
   ],
   "files": [
     "dist",
