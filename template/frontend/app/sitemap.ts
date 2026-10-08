@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { buildSitemap } from "@latentfreedom/status-page/next";
+import { buildSitemap } from "@latentedge/status-page/next";
 import config from "../../status.config";
 
 // Emitted as /sitemap.xml at build time by the static export.

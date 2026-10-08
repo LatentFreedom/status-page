@@ -47,7 +47,7 @@ jobs:
           path: tarball
       # The template ships no lockfile (a copy generates its own), so point the
       # dependency at the tarball and resolve the rest fresh.
-      - run: npm pkg set "dependencies.@latentfreedom/status-page=file:$(ls ../../tarball/*.tgz)"
+      - run: npm pkg set "dependencies.@latentedge/status-page=file:$(ls ../../tarball/*.tgz)"
       - run: npm install --no-package-lock
       - run: npm run lint
       - run: npm run typecheck
@@ -73,7 +73,7 @@ jobs:
           path: tarball
       # The template ships no lockfile (a copy generates its own), so point the
       # dependency at the tarball and resolve the rest fresh.
-      - run: npm pkg set "dependencies.@latentfreedom/status-page=file:$(ls ../../tarball/*.tgz)"
+      - run: npm pkg set "dependencies.@latentedge/status-page=file:$(ls ../../tarball/*.tgz)"
       - run: npm install --no-package-lock
       - run: npm run typecheck
       # Bundles the worker without touching any Cloudflare account.

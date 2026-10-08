@@ -1,6 +1,6 @@
 // Type-only import: this file sits above both apps, so it must not need a
 // runtime module of its own. Each app maps the name in its tsconfig `paths`.
-import type { StatusConfig } from "@latentfreedom/status-page";
+import type { StatusConfig } from "@latentedge/status-page";
 
 const config = {
   title: "Example Status",

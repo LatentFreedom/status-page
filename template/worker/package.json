@@ -15,6 +15,6 @@
     "wrangler": "^4.0.0"
   },
   "dependencies": {
-    "@latentfreedom/status-page": "^0.2.0"
+    "@latentedge/status-page": "^0.2.0"
   }
 }

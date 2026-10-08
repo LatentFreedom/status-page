@@ -1,4 +1,4 @@
-import { StatusPage } from "@latentfreedom/status-page/react";
+import { StatusPage } from "@latentedge/status-page/react";
 import config from "../../status.config";
 
 export default function Home() {

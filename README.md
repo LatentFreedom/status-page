@@ -5,7 +5,7 @@ A self-hosted status page on Cloudflare: Next.js static frontend, a probe Worker
 - One overall banner, one row per service, 90 days of uptime bars, auto-refresh every minute.
 - Light and dark themes, mobile-friendly (tap or scrub the bars for a day detail card).
 - No accounts, no framework lock-in, no runtime dependencies in the worker.
-- All code ships in one npm package, [`@latentfreedom/status-page`](packages/status-page). Your repo holds only config, assets, and deploy wiring, so an upgrade is a version bump.
+- All code ships in one npm package, [`@latentedge/status-page`](packages/status-page). Your repo holds only config, assets, and deploy wiring, so an upgrade is a version bump.
 
 ## Repo layout
 
@@ -72,7 +72,7 @@ Removing a service just stops probing it; its old rows are ignored and the raw l
 - Title, description, and logo: `status.config.ts` (logo files go in `frontend/public/`; set `logo: null` to hide it).
 - Search and share previews: `siteUrl`, `ogImage` (1200x630), and `icons` feed the canonical URL, Open Graph and Twitter tags, and `sitemap.xml`.
 - Search engines: `indexable` is the one switch. `false` emits a `noindex` meta tag and a disallow-all `robots.txt` together, so a pre-launch site cannot be half open.
-- Colors: every surface and status color is a CSS variable with a light and a dark value. Override them in your own stylesheet, imported after `@latentfreedom/status-page/styles.css` in `frontend/app/layout.tsx`. The token names are in [`input.css`](packages/status-page/src/styles/input.css).
+- Colors: every surface and status color is a CSS variable with a light and a dark value. Override them in your own stylesheet, imported after `@latentedge/status-page/styles.css` in `frontend/app/layout.tsx`. The token names are in [`input.css`](packages/status-page/src/styles/input.css).
 
 ## Remote-feed mode
 
@@ -84,8 +84,8 @@ In that mode delete `worker/` and leave `services` out of the config: the page t
 ## Upgrading
 
 ```bash
-cd frontend && npm install @latentfreedom/status-page@latest
-cd ../worker && npm install @latentfreedom/status-page@latest && npm run migrate
+cd frontend && npm install @latentedge/status-page@latest
+cd ../worker && npm install @latentedge/status-page@latest && npm run migrate
 ```
 
 The D1 migrations ship inside the package (`worker/wrangler.jsonc` points `migrations_dir` at it), so always run `npm run migrate` before you deploy an upgraded worker.

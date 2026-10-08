@@ -1,5 +1,5 @@
 {
-  "name": "@latentfreedom/status-page",
+  "name": "@latentedge/status-page",
   "version": "0.2.0",
   "description": "Self-hosted status page on Cloudflare: React page, Next.js metadata helpers, and a probe Worker with D1 - driven by one config file.",
   "author": "LatentFreedom",
