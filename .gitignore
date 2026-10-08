@@ -2,14 +2,14 @@
 node_modules/
 
 # next.js
-frontend/.next/
-frontend/out/
-frontend/next-env.d.ts
+template/frontend/.next/
+template/frontend/out/
+template/frontend/next-env.d.ts
 *.tsbuildinfo
 
 # wrangler
-worker/.wrangler/
-worker/dist/
+template/worker/.wrangler/
+template/worker/dist/
 
 # local env files
 .env*.local
@@ -17,3 +17,6 @@ worker/dist/
 # misc
 .DS_Store
 npm-debug.log*
+
+# instances generate their own lockfiles
+template/**/package-lock.json
