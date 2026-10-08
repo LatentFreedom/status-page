@@ -124,7 +124,7 @@ npm run typecheck && npm test && npm run build
 npm pack   # then `npm install --no-save <tarball>` inside template/frontend or template/worker
 ```
 
-A `v*` tag publishes to npm through `.github/workflows/release.yml`.
+A `v*` tag publishes to npm through `.github/workflows/release.yml` by npm trusted publishing (no stored token): the package settings on npmjs.com list this repo and `release.yml` as the trusted publisher.
 
 ## License
 

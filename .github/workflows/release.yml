@@ -23,7 +23,7 @@ jobs:
       - run: npm ci
       # A tag that disagrees with package.json would publish the wrong version.
       - run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
-      # prepublishOnly runs typecheck, test, and build.
+      # prepublishOnly runs typecheck, test, and build. No token: npm trusted
+      # publishing authenticates this workflow through the OIDC id-token, so
+      # the package settings on npmjs.com must list this repo and file.
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
