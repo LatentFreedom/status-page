@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ServiceRow } from "./ServiceRow.js";
+import { NoticeBanner } from "./NoticeBanner.js";
 import { StatusBanner } from "./StatusBanner.js";
 import {
   fetchUptime,
@@ -74,6 +75,8 @@ export function StatusPage({ config }: { config: StatusPageConfig }) {
           Status feed unavailable{feed ? " - showing the last successful update." : "."}
         </p>
       )}
+
+      {feed?.notice && <NoticeBanner notice={feed.notice} />}
 
       {feed ? (
         <>

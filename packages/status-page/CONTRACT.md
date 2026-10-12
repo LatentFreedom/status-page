@@ -38,6 +38,11 @@ Top level:
 - `window_days` - length of the history window; the page renders exactly 90 bars and left-pads shorter histories with grey.
 - `overall` - `"operational" | "partial_outage" | "major_outage" | "unknown"`.
   The reference implementation uses: `unknown` when no service has ever been checked; `major_outage` when `down * 2 >= total`; `partial_outage` when any service is down; `operational` otherwise.
+- `notice` - a feed-level message for visitors, or `null`. OPTIONAL: consumers must treat a missing field as `null`. The page shows it as a banner above the overall state. Example: `{ "kind": "provider_incident", "message": "Cloudflare reports: Network Performance Issues", "url": "https://stspg.io/abc", "started_at": "2026-10-12T16:20:00.000Z" }`.
+  - `kind` - free-form category chosen by the producer; the page does not interpret it.
+  - `message` - the text to show, written by the producer.
+  - `url` - a link to more detail, or `null`.
+  - `started_at` - ISO 8601 time the condition started.
 
 Per service:
 

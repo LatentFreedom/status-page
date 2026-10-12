@@ -52,6 +52,18 @@ describe("buildFeed", () => {
     expect(d).toMatchObject({ current: "up", reason: null });
   });
 
+  it("adds a notice only when one is given", () => {
+    const notice = {
+      kind: "provider_incident",
+      message: "Cloudflare reports: Network Performance Issues",
+      url: "https://stspg.io/abc",
+      started_at: "2026-09-20T11:40:00.000Z",
+    };
+    expect(buildFeed([], [], NOW, { notice }).notice).toEqual(notice);
+    expect("notice" in buildFeed([], [], NOW)).toBe(false);
+    expect("notice" in buildFeed([], [], NOW, { notice: null })).toBe(false);
+  });
+
   it("rounds to two decimals and never turns an empty day into 0%", () => {
     expect(pctOf(2, 3)).toBe(66.67);
     expect(pctOf(0, 0)).toBeNull();

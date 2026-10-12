@@ -80,6 +80,7 @@ The frontend and worker are decoupled by the feed contract ([CONTRACT.md](packag
 If you already have an endpoint that serves that JSON shape, point the frontend at it and skip the worker + D1 entirely:
 set `apiBase` in the config, or override per build with `NEXT_PUBLIC_UPTIME_API`.
 In that mode delete `worker/` and leave `services` out of the config: the page takes its service list from the feed, and only the worker reads `services`.
+A feed can also carry an optional `notice` (for example a hosting-provider incident); the page shows its message and link as a banner above the overall state.
 
 ## Upgrading
 

@@ -33,9 +33,25 @@ export type Overall =
   | "major_outage"
   | "unknown";
 
+/**
+ * A feed-level message for visitors, such as a hosting-provider incident that
+ * explains a wave of failures. The producer writes the text; the page shows it.
+ */
+export type FeedNotice = {
+  /** Free-form category, e.g. "provider_incident" or "provider_degraded". */
+  kind: string;
+  message: string;
+  /** Where to read more; null when there is no link. */
+  url: string | null;
+  /** ISO 8601 time the condition started. */
+  started_at: string;
+};
+
 export type UptimeFeed = {
   generated_at: string;
   window_days: number;
   overall: Overall;
   services: Service[];
+  /** Optional: older feeds omit it, and a missing field means no notice. */
+  notice?: FeedNotice | null;
 };

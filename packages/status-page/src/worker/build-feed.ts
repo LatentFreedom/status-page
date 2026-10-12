@@ -1,4 +1,4 @@
-import type { Overall, Service, UptimeFeed } from "../contract.js";
+import type { FeedNotice, Overall, Service, UptimeFeed } from "../contract.js";
 
 // Pure feed assembly, shared by this package's worker and by any other worker
 // that keeps its own probe but wants to publish the same contract. Nothing
@@ -73,6 +73,7 @@ export function buildFeed(
   services: FeedServiceInput[],
   daily: FeedDailyInput[],
   nowSeconds: number = Math.floor(Date.now() / 1000),
+  options: { notice?: FeedNotice | null } = {},
 ): UptimeFeed {
   const windowDays = feedWindow(nowSeconds);
   const byServiceDay = new Map<string, FeedDailyInput>();
@@ -122,5 +123,7 @@ export function buildFeed(
     window_days: WINDOW_DAYS,
     overall: overallOf(knownCount, downCount, payload.length),
     services: payload,
+    // Set only when given, so feeds without a notice keep the 0.2 shape.
+    ...(options.notice ? { notice: options.notice } : {}),
   };
 }

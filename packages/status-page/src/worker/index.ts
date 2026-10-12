@@ -5,6 +5,7 @@ import type { Env } from "./env.js";
 
 export type { Env } from "./env.js";
 export type { ProbeSummary } from "./probe.js";
+export type { FeedNotice } from "../contract.js";
 export {
   buildFeed,
   FEED_CACHE_CONTROL,

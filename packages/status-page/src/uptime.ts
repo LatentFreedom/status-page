@@ -9,6 +9,7 @@
 
 export type {
   DayBucket,
+  FeedNotice,
   Overall,
   Service,
   ServiceState,
