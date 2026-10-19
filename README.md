@@ -71,6 +71,8 @@ Removing a service just stops probing it; its old rows are ignored and the raw l
 
 - Title, description, and logo: `status.config.ts` (logo files go in `frontend/public/`; set `logo: null` to hide it).
 - Search and share previews: `siteUrl`, `ogImage` (1200x630), and `icons` feed the canonical URL, Open Graph and Twitter tags, and `sitemap.xml`.
+- Site icon: put `icon.svg`, `apple-icon.png`, and `favicon.ico` in `frontend/app/` and leave `icons` out of the config, so Next.js emits the icon tags from those files.
+  Set `icons` only to serve icons from `frontend/public/` instead; any `icons` value, even `{}`, replaces the `app/` icon files.
 - Search engines: `indexable` is the one switch. `false` emits a `noindex` meta tag and a disallow-all `robots.txt` together, so a pre-launch site cannot be half open.
 - Colors: every surface and status color is a CSS variable with a light and a dark value. Override them in your own stylesheet, imported after `@latentedge/status-page/styles.css` in `frontend/app/layout.tsx`. The token names are in [`input.css`](packages/status-page/src/styles/input.css).
 

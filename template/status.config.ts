@@ -12,9 +12,10 @@ const config = {
   siteUrl: "https://status.example.com",
   // false = noindex meta tag plus a disallow-all robots.txt.
   indexable: true,
-  // Optional: a 1200x630 share image and icons, as paths under frontend/public/.
+  // Optional: a 1200x630 share image, as a path under frontend/public/.
   ogImage: null,
-  icons: {},
+  // Site icon: drop icon.svg, apple-icon.png, and favicon.ico into
+  // frontend/app/ and leave `icons` unset. Setting it replaces those files.
 
   // After `wrangler deploy` in worker/, paste your worker URL here
   // (keep the /api/v1 suffix). A custom domain works the same way.

@@ -46,7 +46,11 @@ export type StatusConfig = {
   indexable: boolean;
   /** 1200x630 share image path under the frontend's public/, or null for none. */
   ogImage?: string | null;
-  /** Favicon and home-screen icons. Omit to ship none. */
+  /**
+   * Favicon and home-screen icons as public/ paths. Omit it to let the
+   * app/ icon files (icon.svg, apple-icon.png, favicon.ico) drive the icon
+   * tags: setting it, even to {}, replaces them.
+   */
   icons?: IconsConfig;
   /** Logo path under the frontend's public/ (e.g. "/logo.svg"), or null to hide it. */
   logo: string | null;
