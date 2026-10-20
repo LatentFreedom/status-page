@@ -14,8 +14,7 @@ const config = {
   indexable: true,
   // Optional: a 1200x630 share image, as a path under frontend/public/.
   ogImage: null,
-  // Site icon: drop icon.svg, apple-icon.png, and favicon.ico into
-  // frontend/app/ and leave `icons` unset. Setting it replaces those files.
+  // The site icon is frontend/app/icon.svg, apple-icon.png, and favicon.ico.
 
   // After `wrangler deploy` in worker/, paste your worker URL here
   // (keep the /api/v1 suffix). A custom domain works the same way.

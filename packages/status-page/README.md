@@ -12,7 +12,7 @@ npx degit LatentFreedom/status-page/template my-status
 
 | Import | Exports |
 |---|---|
-| `@latentedge/status-page` | `StatusConfig`, `ServiceConfig`, `IconsConfig`, `defineConfig`, the feed types (`UptimeFeed`, `Service`, `DayBucket`, `Overall`), and the pure helpers (`fetchUptime`, `barTone`, `padDays`, `sortServices`, `bannerText`, ...) |
+| `@latentedge/status-page` | `StatusConfig`, `ServiceConfig`, `defineConfig`, the feed types (`UptimeFeed`, `Service`, `DayBucket`, `Overall`), and the pure helpers (`fetchUptime`, `barTone`, `padDays`, `sortServices`, `bannerText`, ...) |
 | `@latentedge/status-page/react` | `StatusLayout`, `StatusPage`, `ServiceRow`, `StatusBanner`, `UptimeBars`, `ThemeProvider`, `useTheme`, `ThemeToggle` |
 | `@latentedge/status-page/next` | `buildMetadata(config)`, `buildSitemap(config)`, `buildRobots(config)` |
 | `@latentedge/status-page/worker` | `createStatusWorker(config)` - returns `{ fetch, scheduled }`; needs a D1 binding named `DB` |

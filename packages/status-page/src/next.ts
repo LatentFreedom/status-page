@@ -1,8 +1,9 @@
 import type { Metadata, MetadataRoute } from "next";
-import type { IconsConfig, StatusConfig } from "./config.js";
+import type { StatusConfig } from "./config.js";
 
 // Everything here is derived from status.config.ts so an instance never
-// edits app/ files to rebrand: the app shell stays identical across sites.
+// edits app/ code to rebrand: the app shell stays identical across sites.
+// The one exception is the site icon, which is the app/ icon files.
 
 export function buildMetadata(config: StatusConfig): Metadata {
   const ogImage = config.ogImage ?? null;
@@ -12,10 +13,9 @@ export function buildMetadata(config: StatusConfig): Metadata {
     title: config.title,
     description: config.description,
     alternates: { canonical: "/" },
-    // An explicit `icons` key, even an empty one, makes Next.js drop the
-    // app/icon.* and app/apple-icon.* file-convention tags, so leave it out
-    // entirely when the config does not set icons.
-    ...(config.icons ? { icons: buildIcons(config.icons) } : {}),
+    // No `icons` key: any value, even an empty one, makes Next.js drop the
+    // app/icon.svg, app/apple-icon.png, and app/favicon.ico tags, and those
+    // files are the one icon source every portfolio site uses.
     openGraph: {
       title: config.title,
       description: config.description,
@@ -38,24 +38,6 @@ export function buildMetadata(config: StatusConfig): Metadata {
     robots: config.indexable
       ? { index: true, follow: true }
       : { index: false, follow: false, nocache: true },
-  };
-}
-
-function buildIcons(icons: IconsConfig): NonNullable<Metadata["icons"]> {
-  const iconList = [
-    icons.favicon ? { url: icons.favicon, sizes: "any" } : null,
-    icons.icon192
-      ? { url: icons.icon192, sizes: "192x192", type: "image/png" }
-      : null,
-    icons.icon512
-      ? { url: icons.icon512, sizes: "512x512", type: "image/png" }
-      : null,
-  ].filter((icon) => icon !== null);
-  return {
-    icon: iconList,
-    apple: icons.appleTouch
-      ? [{ url: icons.appleTouch, sizes: "180x180", type: "image/png" }]
-      : [],
   };
 }
 
